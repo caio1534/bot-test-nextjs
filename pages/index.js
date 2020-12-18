@@ -1,65 +1,83 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import React, { useState, useEffect } from "react"
+import { Form } from 'react-bootstrap'
+import Icon from '../public/Icon'
+import Link from 'next/link'
+import { TitleXL } from '../styles/styles'
 
-export default function Home() {
+function Home() {
+
+  //state para input
+  const [inputNumber, setInputNumber] = useState('');
+  //state para feedback ao user
+  const [result, setResult] = useState('');
+  //state para controlar visibilidade do feedback
+  const [visibility, setVisibility] = useState(false);
+
+  //atualizar feedback quando o input muda
+  useEffect(() => {
+    fizzbuzz(inputNumber)
+  }, [inputNumber])
+
+  const handleOnChange = e => {
+    //se existir um input altera o state e dá trigger ao useEffect
+    if (e.target.value) { setInputNumber(e.target.value) }
+    //senão existir input dá reset aos states e esconde feedback
+    else { setInputNumber(''); setResult(''); setVisibility(false) }
+  }
+
+  //lógica para calcular se o número é um fizzbuzz
+  const fizzbuzz = (i) => {
+    if (isNaN(i)) {
+      //just a couple easter eggs
+      if (i === 'pi') setResult('Smartass... Try another one 🙃')
+      else if (i === 'e') setResult('Was that a mathematical constant? 🤓')
+      else setResult('I said numbers... 🙄')
+    }
+    //main logic
+    else if (i == 0) { setResult('Not FizzBuzz 😅') }
+    else if (i % 1 !== 0) { setResult('Integers only. Try a whole number instead 😶') }
+    else if (i % 3 === 0 && i % 5 === 0) { setResult('FizzBuzz 🔥') }
+    else if (i % 3 === 0) { setResult('Fizz ⚡') }
+    else if (i % 5 === 0) { setResult('Buzz 🚀') }
+    else { setResult('Not FizzBuzz 😅') }
+
+    if (inputNumber.length > 0) { setVisibility(true) }
+  }
+
+
+  //ignorar classes css nas tags
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className="App">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm mt-4 mb-3 mx-8">
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+            {
+              //Link do nextjs + Styled component
+            }
+            <Link href='whatisfizzbuzzerbot'><a><Icon size='boxIcon' /></a></Link>
+            <TitleXL size={40}>Tell me a number!</TitleXL>
+            
+            {
+              //ignorar código abaixo
+            }
+            <div className='mb-10'>
+              <Form.Group className='my-10'>
+                <Form.Control value={inputNumber} onChange={handleOnChange} size="lg" type="text" placeholder="Type in any number" />
+              </Form.Group>
+              <div className={visibility ? 'visible' : 'invisible'}>
+                <h4 className="font-weight-bold mt-2 mb-0">
+                  {result}
+                </h4>
+              </div>
+            </div>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+          </div>
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+      </div>
     </div>
-  )
+  );
 }
+
+export default Home;
